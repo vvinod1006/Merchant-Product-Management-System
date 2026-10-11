@@ -1,0 +1,15 @@
+<%@ page contentType="text/html; charset=UTF-8" %><%@ page import="java.util.List" %><%@ page import="org.dcl.merchantproductapp.dto.Product" %><% if(session.getAttribute("merchantId")==null){response.sendRedirect(request.getContextPath()+"/login.jsp");return;} List<Product> products=(List<Product>)request.getAttribute("products"); %><!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>MerchantHub | Products</title><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"><link href="${pageContext.request.contextPath}/assets/css/style.css" rel="stylesheet"></head><body><div class="app-layout"><aside class="sidebar"><a class="brand" href="${pageContext.request.contextPath}/dashboard"><span class="brand-icon">M</span> MerchantHub</a><div class="sidebar-label">WORKSPACE</div><a class="nav-item" href="${pageContext.request.contextPath}/dashboard">▦ &nbsp; Dashboard</a><a class="nav-item active" href="${pageContext.request.contextPath}/products">▤ &nbsp; My Products</a><a class="nav-item" href="${pageContext.request.contextPath}/add-product.jsp">＋ &nbsp; Add Product</a><div class="sidebar-bottom"><a class="nav-item" href="${pageContext.request.contextPath}/logout">↪ &nbsp; Sign out</a></div></aside><main class="main-content"><header class="topbar"><div><h5 class="mb-1">Product inventory</h5><small class="text-secondary">Manage your catalog</small></div><a class="btn btn-primary" href="${pageContext.request.contextPath}/add-product.jsp">＋ Add Product</a></header><section class="page-content"><p class="eyebrow">CATALOG</p><h2 class="fw-bold">My Products</h2><p class="text-secondary">Products linked to your merchant account.</p><% if("1".equals(request.getParameter("added"))){ %><div class="alert alert-success">Product added successfully.</div><% } %><div class="card border-0 shadow-sm mt-4"><div class="card-body"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>ID</th><th>Product</th><th>Brand</th><th>Category</th><th class="text-end">Price</th></tr></thead><tbody><% if(products!=null&&!products.isEmpty()){for(Product p:products){ %><tr><td>#<%=p.getId()%></td><td class="fw-semibold"><%=esc(p.getName())%></td><td><%=esc(p.getBrand())%></td><td><span class="category-pill"><%=esc(p.getCategory())%></span></td><td class="text-end">₹ <%=String.format(java.util.Locale.US,"%.2f",p.getPrice())%></td></tr><% }}else{ %><tr><td colspan="5" class="text-center text-secondary py-5">No products yet. Add your first product to get started.</td></tr><% } %></tbody></table></div></div></div></section></main></div>
+<%!
+    private String esc(String s) {
+        if (s == null) {
+            return "";
+        }
+
+        return s.replace("&", "&amp;")
+                .replace("<", "&lt;")
+                .replace(">", "&gt;")
+                .replace("\"", "&quot;")
+                .replace("'", "&#x27;");
+    }
+%>
+</body></html>
